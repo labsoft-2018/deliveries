@@ -1,14 +1,14 @@
 (ns deliveries.adapters.location
   (:require [schema.core :as s]
-            [deliveries.models.delivery :as models.delivery]
-            [deliveries.wire.delivery :as wire.delivery]))
+            [deliveries.models.location :as models.location]
+            [deliveries.wire.location :as wire.location]))
 
-(s/defn wire->internal :- models.delivery/Location
-  [{:keys [lat lng]} :- wire.delivery/Location]
+(s/defn wire->internal :- models.location/Location
+  [{:keys [lat lng]} :- wire.location/Location]
   {:location/lat lat
    :location/lng lng})
 
-(s/defn internal->wire :- wire.delivery/Location
-  [{:keys [location/lat location/lng]} :- models.delivery/Location]
+(s/defn internal->wire :- wire.location/Location
+  [{:keys [location/lat location/lng]} :- models.location/Location]
   {:lat lat
    :lng lng})

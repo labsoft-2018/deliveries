@@ -2,9 +2,10 @@
   (:require [schema.core :as s]
             [deliveries.models.delivery :as models.delivery]
             [deliveries.wire.order :as wire.order]
-            [deliveries.wire.delivery :as wire.delivery]
             [geo.spatial :as spatial]
-            [common-labsoft.misc :as misc]))
+            [common-labsoft.misc :as misc]
+            [deliveries.wire.location :as wire.location]
+            [deliveries.models.location :as models.location]))
 
 (s/defn new-delivery-for-order :- models.delivery/Delivery
   [order :- wire.order/Order]
@@ -20,7 +21,7 @@
 
 (s/defn closer-for-location :- models.delivery/Delivery
   [deliveries :- [models.delivery/Delivery]
-   location :- wire.delivery/Location]
+   location :- models.location/Location]
   (let [carrier-point (location->spatial4j-point location)]
     (->> (filter (fn [{origin :origin}]
                    (-> (location->spatial4j-point origin)

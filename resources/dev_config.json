@@ -9,7 +9,7 @@
     "region": "us-east-1"
   },
   "sqs": {
-    "endpoint": "http://localhost:4576"
+    "endpoint": "us-east-1"
   },
   "services": {
     "auth": {

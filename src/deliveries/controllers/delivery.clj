@@ -6,8 +6,8 @@
             [deliveries.db.datomic.delivery :as datomic.delivery]
             [common-labsoft.protocols.datomic :as protocols.datomic]
             [common-labsoft.protocols.sqs :as protocols.sqs]
-            [deliveries.wire.delivery :as wire.delivery]
-            [deliveries.models.delivery :as models.delivery]))
+            [deliveries.models.delivery :as models.delivery]
+            [deliveries.models.location :as models.location]))
 
 (s/defn new-order-delivery!
   [order :- wire.order/OrderDocument
@@ -18,7 +18,7 @@
       (diplomat.producer/delivery-allocated! producer)))
 
 (s/defn get-closer-open-delivery :- models.delivery/Delivery
-  [location :- wire.delivery/Location
+  [location :- models.location/Location
    datomic :- protocols.datomic/IDatomic]
   (-> (datomic.delivery/open-deliveries! datomic)
       (logic.delivery/closer-for-location location)))
