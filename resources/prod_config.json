@@ -1,0 +1,24 @@
+{
+  "env": "prod",
+  "service-name": "deliveries",
+  "service-password": "lzPj^joTteHCT3{l&amp;oz!xd]87e.k&quot;I",
+  "datomic-endpoint": "datomic:mem://deliveries",
+  "port": 8029,
+  "s3-auth": {
+    "bucket-name": "labsoft-secrets",
+    "region": "us-east-1"
+  },
+  "sqs": {
+    "endpoint": "us-east-1"
+  },
+  "services": {
+    "auth": {
+      "host": "https://auth.labsoft.host",
+      "endpoints": {
+        "service-token": "/api/services/token"
+      }
+    }
+  },
+  "pub-key-path": "prod/pubkey.pem",
+  "priv-key-path": "prod/privkey.pem"
+}

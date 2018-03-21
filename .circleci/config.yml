@@ -1,0 +1,83 @@
+# Clojure CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-clojure/ for more details
+#
+
+defaults: &defaults
+  working_directory: ~/repo
+  environment:
+        LEIN_ROOT: "true"
+        JVM_OPTS: -Xmx3200m
+        AWS_DEFAULT_REGION: us-east-1
+  docker:
+    - image: leoiacovini/circleci-lein-aws:2.7.1
+
+version: 2
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: lein midje
+
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: lein uberjar
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: |
+          export IMAGE_NAME=labsoft-2018/$CIRCLE_PROJECT_REPONAME
+          export TAG=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/$IMAGE_NAME
+          docker build -t $IMAGE_NAME:$CIRCLE_BUILD_NUM -t $IMAGE_NAME:latest .
+          docker tag $IMAGE_NAME:latest $TAG
+          aws ecr create-repository --repository-name $IMAGE_NAME || echo "Repo already exists"
+          $(aws ecr get-login --no-include-email)
+          docker push $TAG
+
+  vsts-push:
+    docker:
+      - image: circleci/clojure:lein-2.7.1
+    working_directory: ~/repo
+    steps:
+      - add_ssh_keys
+      - checkout
+      - run: ssh-keyscan vs-ssh.visualstudio.com >> ~/.ssh/known_hosts
+      - run: git push ssh://2018-PCS2044-LAMBDA@vs-ssh.visualstudio.com:22/quack-pack/_ssh/$CIRCLE_PROJECT_REPONAME master
+
+  deploy:
+    <<: *defaults
+    steps:
+      - run: echo "Por Enquanto Nada..."
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - test
+      - build:
+          filters:
+            branches:
+              only: master
+          requires:
+            - test
+      - vsts-push:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build
+      - promote:
+          filters:
+            branches:
+              only: master
+          type: approval
+          requires:
+            - build
+      - deploy:
+          filters:
+            branches:
+              only: master
+          requires:
+            - promote
