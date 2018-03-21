@@ -5,4 +5,4 @@
 
 (th/with-service [ser/start! ser/stop!] [system service]
  (fact "Http Test"
-   (th/request! service :get "/") => {:res "Hello, World!"}))
+   (th/request! service :get "/api") => {:res "Hello, World!"}))
