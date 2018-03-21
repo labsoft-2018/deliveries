@@ -10,7 +10,8 @@
                                     :password :env/clojars_password}]]
   :plugins [[lein-midje "3.2.1"]]
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [labsoft-2018/common-labsoft "0.9.2-SNAPSHOT"]]
+                 [factual/geo "1.2.0"]
+                 [labsoft-2018/common-labsoft "0.10.0-SNAPSHOT"]]
   :resource-paths ["resources"]
   :min-lein-version "2.0.0"
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "deliveries.service/start!"]}
