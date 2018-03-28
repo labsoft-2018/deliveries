@@ -22,3 +22,14 @@
    datomic :- protocols.datomic/IDatomic]
   (-> (datomic.delivery/open-deliveries! datomic)
       (logic.delivery/closer-for-location location)))
+
+(s/defn accept-delivery! :- models.delivery/Delivery
+  [delivery-id :- s/Uuid
+   carrier-id :- s/Uuid
+   datomic :- protocols.datomic/IDatomic
+   producer :- protocols.sqs/IProducer]
+  (-> (datomic.delivery/lookup! delivery-id datomic)
+      (logic.delivery/accept-delivery carrier-id)
+      (datomic.delivery/update! datomic)
+      (doto
+        (diplomat.producer/delivery-closed! producer))))

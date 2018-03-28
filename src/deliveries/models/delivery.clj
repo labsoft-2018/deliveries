@@ -9,11 +9,11 @@
                          :delivery.status/cancelled})
 (s/defschema DeliveryStatus (apply s/enum delivery-statuses))
 
-(def delivery-skeleton {:id          {:schema s/Uuid :id true}
-                        :carrier-id  {:schema s/Uuid :required true}
-                        :orders      {:schema #{s/Uuid} :required true}
-                        :status      {:schema DeliveryStatus :required true}
-                        :origin      {:schema models.location/Location :required true :component true}
-                        :destination {:schema models.location/Location :required true :component true}
-                        :created-at  {:schema time/LocalDateTime :required true}})
+(def delivery-skeleton {:delivery/id          {:schema s/Uuid :id true}
+                        :delivery/carrier-id  {:schema s/Uuid :required false}
+                        :delivery/orders      {:schema #{s/Uuid} :required true}
+                        :delivery/status      {:schema DeliveryStatus :required true}
+                        :delivery/origin      {:schema models.location/Location :required true :component true}
+                        :delivery/destination {:schema models.location/Location :required true :component true}
+                        :delivery/created-at  {:schema time/LocalDateTime :required true}})
 (s/defschema Delivery (schema/skel->schema delivery-skeleton))

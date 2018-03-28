@@ -4,7 +4,6 @@
             [deliveries.wire.order :as wire.order]
             [geo.spatial :as spatial]
             [common-labsoft.misc :as misc]
-            [deliveries.wire.location :as wire.location]
             [deliveries.models.location :as models.location]))
 
 (s/defn new-delivery-for-order :- models.delivery/Delivery
@@ -31,3 +30,8 @@
                    (location-distance origin1 carrier-point)
                    (location-distance origin2 carrier-point))))
          first)))
+
+(s/defn accept-delivery :- models.delivery/Delivery
+  [delivery :- models.delivery/Delivery, carrier-id :- s/Uuid]
+  (assoc delivery :delivery/carrier-id carrier-id
+                  :delivery/status :delivery.status/closed))

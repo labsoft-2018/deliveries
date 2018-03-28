@@ -25,8 +25,11 @@
 
 
 (defn accept-delivery
-  []
-  )
+  [{{:keys [datomic producer]} :components delivery-id :delivery-id ident :identity}]
+  {:status 202
+   :schema wire.delivery/DeliveryDocument
+   :body   (-> (controllers.delivery/accept-delivery! delivery-id (:sub ident) datomic producer)
+               (adapters.delivery/internal->document-wire))})
 
 (defroutes routes
   [[["/api" ^:interceptors [int-err/catch!
@@ -37,7 +40,7 @@
                             int-schema/coerce-output]
      {:get [:hello-world hello-world]}
 
-     ["/request-deliveries"
+     ["/request-deliveries" ^:interceptors [(int-auth/allow-scopes? "carrier" "admin")]
       {:get [:deliveries-for-carrier deliveries-for-carrier]}
       ["/:id" ^:interceptors [(int-adapt/path->uuid :id :delivery-id)]
        {:post [:accept-delivery accept-delivery]}]]]]])

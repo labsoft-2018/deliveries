@@ -9,3 +9,9 @@
    producer :- protocols.sqs/IProducer]
   (protocols.sqs/produce! producer {:topic   :delivery-allocated
                                     :message (adapters.delivery/internal->document-wire delivery)}))
+
+(s/defn delivery-closed!
+  [delivery :- models.delivery/Delivery
+   producer :- protocols.sqs/IProducer]
+  (protocols.sqs/produce! producer {:topic   :delivery-closed
+                                    :message (adapters.delivery/internal->document-wire delivery)}))

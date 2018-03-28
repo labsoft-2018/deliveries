@@ -15,3 +15,11 @@
   (datomic/entities '{:find  [?e]
                       :in    [$]
                       :where [[?e :delivery/status :delivery.status/open]]} (datomic/db datomic)))
+
+(s/defn lookup! :- models.delivery/Delivery
+  [delivery-id :- s/Uuid, datomic :- protocols.datomic/IDatomic]
+  (datomic/lookup! :delivery/id delivery-id (datomic/db datomic)))
+
+(s/defn update! :- models.delivery/Delivery
+  [delivery :- models.delivery/Delivery, datomic :- protocols.datomic/IDatomic]
+  (datomic/update! :delivery-id delivery datomic))
