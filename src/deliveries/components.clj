@@ -11,7 +11,8 @@
             [common-labsoft.components.s3-client :as components.s3-client]
             [common-labsoft.components.http-client :as components.http]
             [common-labsoft.components.config :as components.config]
-            [common-labsoft.components.sqs :as components.sqs]))
+            [common-labsoft.components.sqs :as components.sqs]
+            [common-labsoft.components.mock-sqs :as components.mock-sqs]))
 
 (defn base-system [config-name]
   (component/system-map
@@ -25,3 +26,10 @@
     :sqs-consumer (component/using (components.sqs/new-consumer sqs/settings) [:config :webapp])
     :http (component/using (components.http/new-http-client) [:config :token])
     :webapp (component/using (components.webapp/new-webapp) [:config :datomic :token :crypto :sqs-producer :http])))
+
+(defn test-system [config-name]
+  (merge
+    (base-system config-name)
+    (component/system-map
+      :sqs-producer (component/using (components.mock-sqs/new-mock-producer sqs/settings) [:config])
+      :sqs-consumer (component/using (components.mock-sqs/new-mock-consumer sqs/settings) [:config :webapp]))))

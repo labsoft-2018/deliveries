@@ -7,11 +7,11 @@
 (s/defn delivery-allocated!
   [delivery :- models.delivery/Delivery
    producer :- protocols.sqs/IProducer]
-  (protocols.sqs/produce! producer {:topic   :delivery-allocated
+  (protocols.sqs/produce! producer {:queue   :delivery-allocated
                                     :message (adapters.delivery/internal->document-wire delivery)}))
 
 (s/defn delivery-closed!
   [delivery :- models.delivery/Delivery
    producer :- protocols.sqs/IProducer]
-  (protocols.sqs/produce! producer {:topic   :delivery-closed
+  (protocols.sqs/produce! producer {:queue   :delivery-closed
                                     :message (adapters.delivery/internal->document-wire delivery)}))

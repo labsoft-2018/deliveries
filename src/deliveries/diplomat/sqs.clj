@@ -4,7 +4,7 @@
             [deliveries.wire.order :as wire.order]
             [deliveries.wire.delivery :as wire.delivery]))
 
-(s/defn ^:private delivery-requested!
+(s/defn delivery-requested!
   [order :- wire.order/OrderDocument
    {:keys [datomic sqs-producer]}]
   (controllers.delivery/new-order-delivery! order datomic sqs-producer))

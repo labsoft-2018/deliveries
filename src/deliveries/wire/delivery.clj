@@ -11,8 +11,8 @@
                         :carrier-id  {:schema s/Uuid :required true}
                         :orders      {:schema #{s/Uuid} :required true}
                         :status      {:schema DeliveryStatus :required true}
-                        :origin      {:schema wire.location/Location :required true :component true}
-                        :destination {:schema wire.location/Location :required true :component true}
+                        :origin      {:schema wire.location/location-skeleton :required true}
+                        :destination {:schema wire.location/location-skeleton :required true}
                         :created-at  {:schema time/LocalDateTime :required true}})
 (s/defschema Delivery (schema/skel->schema delivery-skeleton))
 

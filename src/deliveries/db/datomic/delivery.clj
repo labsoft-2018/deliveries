@@ -3,7 +3,8 @@
             [deliveries.models.delivery :as models.delivery]
             [common-labsoft.protocols.datomic :as protocols.datomic]
             [common-labsoft.time :as time]
-            [common-labsoft.datomic.api :as datomic]))
+            [common-labsoft.datomic.api :as datomic]
+            [common-labsoft.misc :as misc]))
 
 (s/defn insert! :- models.delivery/Delivery
   [delivery :- models.delivery/Delivery, datomic :- protocols.datomic/IDatomic]

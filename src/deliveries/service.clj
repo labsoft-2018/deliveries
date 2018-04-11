@@ -4,7 +4,7 @@
             [deliveries.components :as components]))
 
 (defn start! [& args]
-  (-> (components/base-system "dev_config.json")
+  (-> (components/test-system "dev_config.json")
       (system/bootstrap!)))
 
 (defn stop! []

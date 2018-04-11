@@ -5,8 +5,8 @@
 
 (s/defn wire->internal :- models.location/Location
   [{:keys [lat lng]} :- wire.location/Location]
-  {:location/lat lat
-   :location/lng lng})
+  {:location/lat (bigdec lat)
+   :location/lng (bigdec lng)})
 
 (s/defn internal->wire :- wire.location/Location
   [{:keys [location/lat location/lng]} :- models.location/Location]

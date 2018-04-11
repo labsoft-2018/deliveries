@@ -13,7 +13,9 @@
    :delivery/origin      (misc/map-keys #(keyword "location" (name %)) (:source-location order))
    :delivery/destination (misc/map-keys #(keyword "location" (name %)) (:destination-location order))})
 
-(s/defn ^:private location->spatial4j-point [{:keys [lat lng]}] (spatial/spatial4j-point lat lng))
+(s/defn ^:private location->spatial4j-point [{:keys [location/lat location/lng]}]
+  (prn lat lng)
+  (spatial/spatial4j-point lat lng))
 (s/defn ^:private location-distance [location point]
   (-> (location->spatial4j-point location)
       (spatial/distance point)))
@@ -21,11 +23,12 @@
 (s/defn closer-for-location :- models.delivery/Delivery
   [deliveries :- [models.delivery/Delivery]
    location :- models.location/Location]
+  (prn deliveries)
   (let [carrier-point (location->spatial4j-point location)]
-    (->> (filter (fn [{origin :origin}]
+    (->> (filter (fn [{origin :delivery/origin}]
                    (-> (location->spatial4j-point origin)
                        (spatial/intersects? (spatial/circle carrier-point 5000)))) deliveries)
-         (sort (fn [{origin1 :origin} {origin2 :origin}]
+         (sort (fn [{origin1 :delivery/origin} {origin2 :delivery/origin}]
                  (<
                    (location-distance origin1 carrier-point)
                    (location-distance origin2 carrier-point))))

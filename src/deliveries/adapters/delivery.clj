@@ -7,5 +7,6 @@
 (s/defn internal->document-wire :- wire.delivery/DeliveryDocument
   [delivery :- models.delivery/Delivery]
   {:delivery (-> (misc/map-keys (comp keyword name) delivery)
+                 (update :status (comp keyword name))
                  (update :origin #(misc/map-keys (comp keyword name) %))
                  (update :destination #(misc/map-keys (comp keyword name) %)))})
